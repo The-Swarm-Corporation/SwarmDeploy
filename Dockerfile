@@ -21,12 +21,11 @@ COPY requirements.txt .
 
 # Install Python dependencies with increased timeout and retry
 RUN pip install --upgrade pip && \
-    pip install --default-timeout=100 --retries=5 -r requirements.txt
+    pip install --default-timeout=600 --retries=10 -r requirements.txt --index-url=https://pypi.org/simple
 
 # Copy the application code
 FROM base
 COPY --from=builder /app /app
-COPY . .
 
 # Command to run the application with dynamic worker count
 CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port 8000 --workers $(nproc)"]
