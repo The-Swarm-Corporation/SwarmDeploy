@@ -1,5 +1,5 @@
 # Use the official Python 3.12 image
-FROM python:3.12-slim
+FROM python:3.12-slim AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies for faster builds
+FROM base AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
@@ -23,6 +24,8 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Copy the application code
+FROM base
+COPY --from=builder /app /app
 COPY . .
 
 # Command to run the application with dynamic worker count
