@@ -19,9 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy only requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies with increased timeout and retry
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install --default-timeout=100 --retries=5 -r requirements.txt
 
 # Copy the application code
 FROM base
