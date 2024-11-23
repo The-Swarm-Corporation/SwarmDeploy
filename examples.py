@@ -107,6 +107,7 @@ router = SequentialWorkflow(
         operational_analyst_agent,
     ],
     output_type="all",
+    
 )
 
 # Advanced usage with configuration
