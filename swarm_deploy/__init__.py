@@ -4,4 +4,4 @@ from swarm_deploy.main import (
     SwarmDeploy,
 )
 
-__all__ = ["SwarmDeploy"]
+__all__ = ["SwarmDeploy", "SwarmBatchOutput", "SwarmConfig"]
