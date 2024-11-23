@@ -101,10 +101,16 @@ class SwarmState(BaseModel):
 
 
 class SwarmOutput(BaseModel):
-    id: str = Field(..., description="Unique identifier for the output")
+    id: str = Field(
+        ..., description="Unique identifier for the output"
+    )
     timestamp: datetime = Field(default_factory=datetime.now)
-    status: str = Field(..., description="Status of the task execution")
-    execution_time: float = Field(..., description="Time taken to execute in seconds")
+    status: str = Field(
+        ..., description="Status of the task execution"
+    )
+    execution_time: float = Field(
+        ..., description="Time taken to execute in seconds"
+    )
     result: Any = Field(..., description="Task execution result")
     metadata: Dict[str, Any] = Field(default_factory=dict)
     cached: bool = Field(default=False)
@@ -119,10 +125,13 @@ class SwarmOutput(BaseModel):
     def dict(self, *args, **kwargs):
         d = super().dict(*args, **kwargs)
         # Ensure result is JSON serializable
-        if isinstance(d['result'], (dict, list, str, int, float, bool, None.__class__)):
+        if isinstance(
+            d["result"],
+            (dict, list, str, int, float, bool, None.__class__),
+        ):
             return d
         # Convert non-JSON serializable results to string representation
-        d['result'] = str(d['result'])
+        d["result"] = str(d["result"])
         return d
 
 
@@ -403,7 +412,12 @@ class SwarmDeploy:
                 logger.error("Background worker error", error=str(e))
                 await asyncio.sleep(1)
 
-    async def _process_task(self, task_id: str, task_input: SwarmInput, request_id: Optional[str]):
+    async def _process_task(
+        self,
+        task_id: str,
+        task_input: SwarmInput,
+        request_id: Optional[str],
+    ):
         """Process a single task with enhanced error handling"""
         start_time = time.time()
 
@@ -412,16 +426,28 @@ class SwarmDeploy:
                 self.state.active_tasks += 1
                 self.state.status = "processing"
 
-                logger.info(f"Starting task processing", 
+                logger.info(
+                    "Starting task processing",
                     task_id=task_id,
-                    task=task_input.task[:100]
+                    task=task_input.task[:100],
                 )
 
                 try:
                     result = await self._execute_task(task_input)
-                    
+
                     # Ensure result is JSON serializable
-                    if not isinstance(result, (dict, list, str, int, float, bool, None.__class__)):
+                    if not isinstance(
+                        result,
+                        (
+                            dict,
+                            list,
+                            str,
+                            int,
+                            float,
+                            bool,
+                            None.__class__,
+                        ),
+                    ):
                         result = str(result)
 
                     execution_time = time.time() - start_time
@@ -447,29 +473,34 @@ class SwarmDeploy:
 
                     # Cache successful results
                     cache_key = f"{self.callable_name}:{hash(task_input.task)}"
-                    await self.cache.set(cache_key, result, ttl=self.config.cache_ttl)
+                    await self.cache.set(
+                        cache_key, result, ttl=self.config.cache_ttl
+                    )
 
-                    logger.info(f"Task completed successfully", 
+                    logger.info(
+                        "Task completed successfully",
                         task_id=task_id,
-                        execution_time=execution_time
+                        execution_time=execution_time,
                     )
 
                     return output
 
                 except Exception as e:
-                    logger.error(f"Task execution error",
+                    logger.error(
+                        "Task execution error",
                         task_id=task_id,
                         error=str(e),
-                        exc_info=True
+                        exc_info=True,
                     )
                     raise
 
         except Exception as e:
             error_msg = str(e)
-            logger.error(f"Task processing error",
+            logger.error(
+                "Task processing error",
                 task_id=task_id,
                 error=error_msg,
-                exc_info=True
+                exc_info=True,
             )
             ERROR_COUNTER.inc()
             self.state.error_count += 1
@@ -481,7 +512,7 @@ class SwarmDeploy:
                 result={"error": error_msg},
                 metadata={
                     "request_id": request_id,
-                    "error_type": type(e).__name__
+                    "error_type": type(e).__name__,
                 },
             )
             self.task_history[task_id] = output
@@ -489,7 +520,11 @@ class SwarmDeploy:
 
         finally:
             self.state.active_tasks -= 1
-            self.state.status = "idle" if self.state.active_tasks == 0 else "processing"
+            self.state.status = (
+                "idle"
+                if self.state.active_tasks == 0
+                else "processing"
+            )
             self.state.last_activity = datetime.now()
             await self.task_queue.task_done()
 
@@ -498,7 +533,11 @@ class SwarmDeploy:
         try:
             self.formatter.print_panel(
                 f"Executing {self.callable_name} with task: {task_input.task}"
-                + (f" and image: {task_input.img}" if task_input.img else ""),
+                + (
+                    f" and image: {task_input.img}"
+                    if task_input.img
+                    else ""
+                ),
                 title=f"SwarmDeploy Task - {self.config.type}",
             )
 
@@ -507,11 +546,18 @@ class SwarmDeploy:
                     # Run async function with proper error handling
                     result = await self.callable.run(task_input.task)
                     if result is None:
-                        raise ValueError(f"Callable {self.callable_name} returned None")
+                        raise ValueError(
+                            f"Callable {self.callable_name} returned None"
+                        )
                     return result
                 except Exception as e:
-                    logger.error(f"Error in async execution: {str(e)}", exc_info=True)
-                    raise RuntimeError(f"Task execution failed: {str(e)}")
+                    logger.error(
+                        f"Error in async execution: {str(e)}",
+                        exc_info=True,
+                    )
+                    raise RuntimeError(
+                        f"Task execution failed: {str(e)}"
+                    )
             else:
                 # Run CPU-bound tasks in thread pool with proper error handling
                 try:
@@ -520,20 +566,30 @@ class SwarmDeploy:
                         lambda: (
                             self.callable.run(task_input.task)
                             if task_input.img is None
-                            else self.callable.run(task_input.task, task_input.img)
+                            else self.callable.run(
+                                task_input.task, task_input.img
+                            )
                         ),
                     )
                     if result is None:
-                        raise ValueError(f"Callable {self.callable_name} returned None")
+                        raise ValueError(
+                            f"Callable {self.callable_name} returned None"
+                        )
                     return result
                 except Exception as e:
-                    logger.error(f"Error in sync execution: {str(e)}", exc_info=True)
-                    raise RuntimeError(f"Task execution failed: {str(e)}")
+                    logger.error(
+                        f"Error in sync execution: {str(e)}",
+                        exc_info=True,
+                    )
+                    raise RuntimeError(
+                        f"Task execution failed: {str(e)}"
+                    )
 
         except Exception as e:
-            logger.error(f"Error in _execute_task: {str(e)}", exc_info=True)
+            logger.error(
+                f"Error in _execute_task: {str(e)}", exc_info=True
+            )
             raise  # Re-raise the exception to be handled by _process_task
-
 
     def _setup_signal_handlers(self):
         """Setup graceful shutdown handlers"""

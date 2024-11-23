@@ -1,4 +1,3 @@
-
 import asyncio
 import time
 import uuid
@@ -10,6 +9,7 @@ from rich.console import Console
 from swarms.utils.formatter import formatter
 
 from swarm_deploy.callable_name import NameResolver
+from swarm_deploy.message import LOGO
 
 T = TypeVar("T")
 
@@ -126,7 +126,7 @@ class SwarmDeploy:
 
     def _setup_routes(self):
         @self.app.post(
-            f"/v1/swarms/completions/{self.callable_name}",
+            f"/v1/swarms/completions/{self.callable_name}/{self.id}",
             response_model=Union[SwarmOutput, SwarmBatchOutput],
         )
         async def create_completion(task_input: SwarmInput):
@@ -267,8 +267,9 @@ class SwarmDeploy:
         import uvicorn
 
         self.formatter.print_panel(
+            f"\n {LOGO} \n"
             f"Starting SwarmDeploy API server on {host}:{port} for {self.callable_name}\n"
-            f"Endpoint: /v1/swarms/completions/{self.callable_name}",
+            f"Endpoint: /v1/swarms/completions/{self.callable_name}/{self.id}",
             title="Server Startup",
             style="bold green",
         )

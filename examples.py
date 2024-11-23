@@ -112,13 +112,13 @@ router = SequentialWorkflow(
 # Advanced usage with configuration
 swarm = SwarmDeploy(
     router,
-    max_workers=4,
+    # max_workers=4,
     # cache_backend="redis"
 )
 swarm.start(
     host="0.0.0.0",
     port=8000,
-    workers=4,
+    # workers=4,
     # ssl_keyfile="key.pem",
     # ssl_certfile="cert.pem"
 )
