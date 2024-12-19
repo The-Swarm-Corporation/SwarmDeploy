@@ -35,10 +35,10 @@ if [ ! -f "${ROOT}/opt/swarms/install/setup.txt" ]; then
     git checkout --force  $BRANCH
     git pull 
     git log -2 --patch | head  -1000
-    if [ ! -d "${ROOT}/opt/swarms-memory/" ];
-    then
+#    if [ ! -d "${ROOT}/opt/swarms-memory/" ];
+#    then
 #	git clone https://github.com/The-Swarm-Corporation/swarms-memory "${ROOT}/opt/swarms-memory"
-    fi    
+#    fi    
     # where the swarms will run
     mkdir -p "${ROOT}/var/swarms/agent_workspace/"
     mkdir -p "${ROOT}/home/swarms"
