@@ -150,6 +150,9 @@ systemctl status swarms-uvicorn.service || echo oops2
 # now after swarms is up, we restart nginx
 HOST="localhost"
 PORT=5474
+
+systemctl restart swarms-uvicorn
+
 while ! nc -z $HOST $PORT; do
   sleep 1
   echo -n "."
