@@ -7,7 +7,7 @@ url = f"http://localhost:8000/v1/swarms/completions/{callable_name}/{swarm_id}"
 
 # Define the payload
 payload = {
-    "task": "What are the ways vcs can fuck founders over in the term sheet? What should they look for?",  # Replace with your task
+    "task": "What are the ways vcs and founders interact in the term sheet? What should they look for?",  # Replace with your task
 }
 
 # Make the POST request
