@@ -24,7 +24,7 @@ ExecStart=/usr/bin/unbuffer ROOT/var/swarms/agent_workspace/.venv/bin/uvicorn \
         --proxy-headers \
         --forwarded-allow-ips='*' \
         --workers=4 \
-        --port=5474 \
+        --port=8000 \
         api:app
 
 ExecReload=/bin/kill -HUP ${MAINPID}

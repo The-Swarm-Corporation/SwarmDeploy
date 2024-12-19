@@ -149,7 +149,7 @@ systemctl status swarms-uvicorn.service || echo oops2
 
 # now after swarms is up, we restart nginx
 HOST="localhost"
-PORT=5474
+PORT=8000
 
 systemctl restart swarms-uvicorn
 
