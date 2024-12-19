@@ -6,7 +6,7 @@ set -x
 export BRANCH="main"
 export ROOT="/mnt/data1/swarmsdeploy"
 export ROOT="" # empty
-export WORKSOURCE="${ROOT}/opt/swarms/api"
+export WORKSOURCE="${ROOT}/opt/swarms"
 export GIT=https://github.com/jmikedupont2/SwarmDeploy.git
 
 if [ ! -d "${ROOT}/opt/swarms/install/" ]; then
