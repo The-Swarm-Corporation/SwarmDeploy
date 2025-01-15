@@ -12,6 +12,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
+swarm_history.db
 dist/
 experimental
 agent_workspace

@@ -1,3 +1,4 @@
+swarms
 asyncio
 uuid
 datetime
@@ -9,4 +10,3 @@ fastapi
 prometheus_client
 pydantic
 rich
-swarms

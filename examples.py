@@ -1,21 +1,8 @@
-import os
 from dotenv import load_dotenv
 from swarms import Agent, SequentialWorkflow
-from swarm_models import OpenAIChat
 from swarm_deploy import SwarmDeploy
 
 load_dotenv()
-
-# Get the OpenAI API key from the environment variable
-api_key = os.getenv("GROQ_API_KEY")
-
-# Model
-model = OpenAIChat(
-    openai_api_base="https://api.groq.com/openai/v1",
-    openai_api_key=api_key,
-    model_name="llama-3.1-70b-versatile",
-    temperature=0.1,
-)
 
 
 # Initialize specialized agents
@@ -28,7 +15,7 @@ data_extractor_agent = Agent(
 - Company background information
 - Risk factors and challenges
 Present the extracted information in a clear, structured format.""",
-    llm=model,
+    model_name="gpt-4o",
     max_loops=1,
     autosave=True,
     verbose=True,
@@ -49,7 +36,7 @@ summarizer_agent = Agent(
 - Organize information in a logical structure
 - Ensure all critical details are preserved
 Focus on making complex information accessible while retaining all crucial insights.""",
-    llm=model,
+    model_name="gpt-4o",
     max_loops=1,
     autosave=True,
     verbose=True,
@@ -71,7 +58,7 @@ financial_analyst_agent = Agent(
 - Examine debt structure and financing
 - Identify potential areas for financial optimization
 Provide detailed insights and recommendations based on financial data.""",
-    llm=model,
+    model_name="gpt-4o",
     max_loops=1,
     autosave=True,
     verbose=True,
@@ -93,7 +80,7 @@ market_analyst_agent = Agent(
 - Review customer segments and needs
 - Examine regulatory environment
 Provide strategic insights on market positioning and growth opportunities.""",
-    llm=model,
+    model_name="gpt-4o",
     max_loops=1,
     autosave=True,
     verbose=True,
@@ -115,7 +102,7 @@ operational_analyst_agent = Agent(
 - Examine organizational structure
 - Identify potential areas for operational improvement
 Provide detailed insights on operational optimization and scaling opportunities.""",
-    llm=model,
+    model_name="gpt-4o",
     max_loops=1,
     autosave=True,
     verbose=True,
@@ -146,7 +133,7 @@ router = SequentialWorkflow(
 # 5 lines of code to deploy your swarm
 # Advanced usage with configuration
 swarm = SwarmDeploy(
-    router,
+    callable_obj=router,
 )
 
 # Select your host and port!
