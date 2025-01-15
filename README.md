@@ -150,16 +150,8 @@ swarm.start(
     host="0.0.0.0",
     port=8000,
     workers=4,
-    # ssl_keyfile="key.pem",
-    # ssl_certfile="cert.pem"
 )
 
-# # Create a cluster
-# instances = SwarmDeploy.create_cluster(
-#     your_callable,
-#     num_instances=3,
-#     start_port=8000
-# )
 ```
 
 ## Advanced Usage 🔧
@@ -178,17 +170,7 @@ swarm = SwarmDeploy(
 )
 ```
 
-### Clustering and Scaling
 
-```python
-# Create a distributed cluster
-instances = SwarmDeploy.create_cluster(
-    workflow,
-    num_instances=3,
-    start_port=8000,
-    hosts=["host1", "host2", "host3"]
-)
-```
 
 ## API Reference 📚
 
