@@ -175,9 +175,9 @@ class SwarmDatabase:
                 """
                 INSERT INTO swarms (
                     id, name, type, agents, output_type, metadata,
-                    created_at, updated_at, status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
+                    created_at, updated_at, status, description
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
                 (
                     swarm_id,
                     swarm_config.name,
@@ -188,6 +188,7 @@ class SwarmDatabase:
                     now,
                     now,
                     "idle",
+                    "Default description",  # Replace with actual description if available
                 ),
             )
 

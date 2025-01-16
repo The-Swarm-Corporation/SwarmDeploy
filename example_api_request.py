@@ -5,7 +5,7 @@ import json
 callable_name = (
     "SequentialWorkflow"  # Replace with the actual callable name
 )
-swarm_id = "f0d58e55-9d96-4268-bf67-51a5074be5d9"  # Replace with the actual swarm ID
+swarm_id = "cdf6059e-43c4-4991-9a69-0e317648cb52"  # Replace with the actual swarm ID
 url = f"http://localhost:8000/v1/swarms/completions/{callable_name}/{swarm_id}"
 
 # Define the payload
